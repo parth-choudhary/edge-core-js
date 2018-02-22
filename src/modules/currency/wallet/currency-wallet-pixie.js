@@ -155,7 +155,7 @@ export default combinePixies({
   },
 
   syncTimer (input: CurrencyWalletInput) {
-    let timeout: number | void
+    let timeout: TimeoutID | void
 
     function startTimer () {
       // Bail out if either the wallet or the repo aren't ready:

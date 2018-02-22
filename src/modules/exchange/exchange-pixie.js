@@ -30,7 +30,7 @@ export default combinePixies({
   },
 
   update (input: PixieInput<RootProps>) {
-    let timeout: number | void
+    let timeout: TimeoutID | void
 
     function doFetch (): Promise<void> {
       // Bail out if we have no plugins:
