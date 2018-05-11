@@ -56,7 +56,8 @@ class FakeCurrencyEngine {
       onAddressesChecked = nop,
       onBalanceChanged = nop,
       onBlockHeightChanged = nop,
-      onTransactionsChanged = nop
+      onTransactionsChanged = nop,
+      onTxidsChanged = nop
     } = callbacks
 
     // Address callback:
@@ -99,8 +100,13 @@ class FakeCurrencyEngine {
           onTransactionsChanged(changed)
 
           // Save the new list of transactions:
+          const oldTxids = Object.keys(oldTxs)
           for (const tx of txs) {
             oldTxs[tx.txid] = tx
+          }
+          const newTxids = Object.keys(oldTxs)
+          if (newTxids.join(' ') !== oldTxids.join(' ')) {
+            onTxidsChanged(newTxids)
           }
         }
       )
@@ -137,6 +143,10 @@ class FakeCurrencyEngine {
 
   getTransactions () {
     return Promise.resolve(this.store.getState().txs)
+  }
+
+  getTxids () {
+    return Promise.resolve(this.store.getState().txids)
   }
 
   saveTx () {

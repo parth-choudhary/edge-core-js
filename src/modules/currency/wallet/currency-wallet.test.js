@@ -78,14 +78,21 @@ describe('currency wallets', function () {
       },
       onTransactionsChanged (walletId, txs) {
         txs.map(tx => log('changed', tx.txid))
+      },
+      onTxidsChanged (walletId, txids) {
+        log('txids ' + txids.join(' '))
       }
     }
     const wallet = await makeFakeCurrencyWallet(store, callbacks)
     let txState = []
-    log.assert(['balance TEST 0', 'blockHeight 0', 'progress 0'])
     const snoozeTimeMs = 251
     await snooze(snoozeTimeMs)
-    log.assert(['balance TOKEN 0'])
+    log.assert([
+      'balance TEST 0',
+      'balance TOKEN 0',
+      'blockHeight 0',
+      'progress 0'
+    ])
 
     await snooze(snoozeTimeMs)
     store.dispatch({ type: 'SET_TOKEN_BALANCE', payload: 30 })
@@ -108,7 +115,7 @@ describe('currency wallets', function () {
       { txid: 'b', nativeAmount: '100' }
     ]
     store.dispatch({ type: 'SET_TXS', payload: txState })
-    log.assert(['new a', 'new b'])
+    log.assert(['new a', 'new b', 'txids a b'])
 
     await snooze(snoozeTimeMs)
     // Should not trigger:
@@ -123,12 +130,12 @@ describe('currency wallets', function () {
       { txid: 'c', nativeAmount: '200' }
     ]
     store.dispatch({ type: 'SET_TXS', payload: txState })
-    log.assert(['changed a', 'new c'])
+    log.assert(['changed a', 'new c', 'txids a b c'])
 
     await snooze(snoozeTimeMs)
     txState = [{ txid: 'd', nativeAmount: '200' }]
     store.dispatch({ type: 'SET_TXS', payload: txState })
-    log.assert(['new d'])
+    log.assert(['new d', 'txids a b c d'])
 
     // Make several changes in a row which should get batched into one call due to throttling
     txState = [{ txid: 'e', nativeAmount: '200' }]
@@ -139,7 +146,15 @@ describe('currency wallets', function () {
     store.dispatch({ type: 'SET_TXS', payload: txState })
     await snooze(snoozeTimeMs)
 
-    log.assert(['new e', 'new f', 'new g'])
+    log.assert([
+      'new e',
+      'new f',
+      'new g',
+      'txids a b c d e',
+      'txids a b c d e f',
+      'txids a b c d e f g'
+    ])
+    expect(wallet.txids).to.deep.equal(['a', 'b', 'c', 'd', 'e', 'f', 'g'])
   })
 
   it('handles tokens', function () {
