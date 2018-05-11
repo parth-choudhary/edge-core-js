@@ -141,6 +141,11 @@ export function makeCurrencyWalletApi (
       return engine.getNumTransactions(opts)
     },
 
+    get txids () {
+      const state = input.props.selfState
+      return state.txids
+    },
+
     async getTransactions (
       opts: EdgeGetTransactionsOptions = {}
     ): Promise<Array<EdgeTransaction>> {
