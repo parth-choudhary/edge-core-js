@@ -1,6 +1,6 @@
 // @flow
 
-import { buildReducer, filterReducer, memoizeReducer } from 'redux-keto'
+import { buildReducer, filterReducer } from 'redux-keto'
 
 import type {
   EdgeCurrencyInfo,
@@ -139,10 +139,18 @@ const currencyWalletReducer = buildReducer({
     return action.type === 'CURRENCY_WALLET_NAME_CHANGED' ? true : state
   },
 
-  txids: memoizeReducer(
-    (next: CurrencyWalletNext) => next.self.txs,
-    txs => Object.keys(txs)
-  ),
+  txids (state = [], action: RootAction, next: CurrencyWalletNext) {
+    switch (action.type) {
+      case 'CURRENCY_ENGINE_CHANGED_TX_IDS': {
+        return [...action.payload.txids]
+      }
+      case 'CURRENCY_ENGINE_CLEARED': {
+        return []
+      }
+      default:
+        return state
+    }
+  },
 
   txs (state = {}, action: RootAction, next: CurrencyWalletNext) {
     switch (action.type) {

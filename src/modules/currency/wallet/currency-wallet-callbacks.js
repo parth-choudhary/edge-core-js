@@ -263,7 +263,17 @@ export function makeCurrencyWalletCallbacks (
       if (created.length) throttledOnNewTx(created)
     },
 
-    onTxidsChanged () {}
+    onTxidsChanged (txids: Array<string>) {
+      input.props.dispatch({
+        type: 'CURRENCY_ENGINE_CHANGED_TX_IDS',
+        payload: { txids, walletId }
+      })
+      forEachListener(input, ({ onTxidsChanged }) => {
+        if (onTxidsChanged) {
+          onTxidsChanged(walletId, txids)
+        }
+      })
+    }
   }
 }
 

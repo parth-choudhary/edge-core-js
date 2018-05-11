@@ -39,6 +39,17 @@ export interface CurrencyEngineChangedTxs {
 }
 
 /**
+ * Called when a currency engine fires the onTxidsChanged callback.
+ */
+export interface CurrencyEngineChangedTxids {
+  type: 'CURRENCY_ENGINE_CHANGED_TX_IDS';
+  payload: {
+    txids: Array<string>,
+    walletId: string
+  };
+}
+
+/**
  * Called when a currency engine is wiped out.
  */
 export interface CurrencyEngineCleared {
@@ -183,6 +194,7 @@ export type RootAction =
   | AccountKeysLoadedAction
   | AddedCustomToken
   | CurrencyEngineChangedTxs
+  | CurrencyEngineChangedTxids
   | CurrencyEngineCleared
   | CurrencyEngineFailed
   | CurrencyPluginsFailed
