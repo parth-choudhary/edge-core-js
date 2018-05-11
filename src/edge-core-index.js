@@ -323,6 +323,7 @@ export type EdgeAccountCallbacks = {
     walletId: string,
     abcTransactions: Array<EdgeTransaction>
   ) => mixed,
+  +onTxidsChanged?: (walletId: string, txids: Array<string>) => mixed,
   +onWalletDataChanged?: (walletId: string) => mixed,
   +onWalletNameChanged?: (walletId: string, name: string | null) => mixed
 }
@@ -479,6 +480,7 @@ export type EdgeCurrencyWallet = {
   addCustomToken(token: EdgeTokenInfo): Promise<void>,
 
   // Transactions:
+  +txids: Array<string>,
   getBalance(opts: any): string,
   getBlockHeight(): number,
   getNumTransactions(options: any): number,
@@ -686,6 +688,7 @@ export type EdgeCurrencyEngine = {
   getBalance(options: any): string,
   getNumTransactions(options: any): number,
   getTransactions(options: any): Promise<Array<EdgeTransaction>>,
+  getTxids(): Array<string>,
   getFreshAddress(options: any): EdgeFreshAddress,
   addGapLimitAddresses(addresses: Array<string>, options: any): void,
   isAddressUsed(address: string, options: any): boolean,
