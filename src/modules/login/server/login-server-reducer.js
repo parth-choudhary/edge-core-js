@@ -17,7 +17,7 @@ export default combineReducers({
   },
 
   uri (
-    state: string = 'https://auth.airbitz.co/api',
+    state: string = 'https://auth.localhost:8000/api',
     action: RootAction
   ): string {
     return action.type === 'INIT' && action.payload.authServer
