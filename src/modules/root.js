@@ -61,7 +61,7 @@ export function makeCoreRoot (opts: EdgeContextOptions) {
 
   const {
     apiKey = '!invalid',
-    authServer = 'https://auth.airbitz.co/api',
+    authServer = 'https://auth.localhost:8000/api',
     callbacks = {},
     io: rawIo = makeBrowserIo(),
     plugins = [],
