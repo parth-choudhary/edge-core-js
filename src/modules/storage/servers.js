@@ -1,6 +1,6 @@
 import { NetworkError } from '../../error.js'
 
-const syncServers = ['https://git2.airbitz.co', 'https://git3.airbitz.co']
+const syncServers = ['http://localhost:8000']
 
 /**
  * Fetches some resource from a sync server.
